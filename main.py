@@ -56,9 +56,9 @@ def main():
     fig, ax = plt.subplots()
 
     ax.plot(df.index, df.values, '*' ,label="Infections in Germany")
-    ax.plot(df.index, exponential(time_in_days, *poptimal_exponential), 'r-', label="Exponential Fit")
+    ax.plot(df.index, exponential(time_in_days, *poptimal_exponential), 'g-', label="Exponential Fit")
 
-    ax.set_xlabel("Days")
+    ax.set_xlabel("Date")
     ax.set_ylabel("Number of Infections")
 
     ax.legend()
@@ -66,7 +66,32 @@ def main():
 
     fig.savefig("plots/exponential_fit.png")
 
-    plt.show()
+
+    prediction_in_days = 5
+
+    time_in_days = np.arange(start=len(df.values), stop=len(df.values)+prediction_in_days)
+    prediction = exponential(time_in_days, *poptimal_exponential).astype(int)
+    df_prediction = pd.Series(prediction)
+    df_prediction.index = pd.date_range(df.index[-1], periods=prediction_in_days+1, closed="right")
+
+    df_prediction = df.append(df_prediction)
+
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+        print(df_prediction)
+
+
+    fig, ax = plt.subplots()
+
+    ax.plot(df.index, df.values, '*' ,label="Infections in Germany")
+    ax.plot(df_prediction.index, df_prediction.values, 'r--' ,label="Predicted Number of Infections")
+
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Number of Infections")
+
+    ax.legend()
+    fig.autofmt_xdate()
+
+    fig.savefig("plots/exponential_extrapolation.png")
 
 
 if __name__ == '__main__':
