@@ -1,13 +1,19 @@
 import os
+
 import pandas as pd
-import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
 import numpy as np
+
+import matplotlib.pyplot as plt
+
+from scipy.optimize import curve_fit
+
 
 
 CSV_FILENAME = "data/time_series_19-covid-Confirmed.csv"
-CSV_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
+CSV_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/' \
+          'csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
 COUNTRY = "Germany"
+
 
 def download_csv():
     df = pd.read_csv(CSV_URL)
@@ -28,35 +34,39 @@ def main():
 
     df = pd.read_csv(CSV_FILENAME)
 
+    # filter just one country
     df = df[df["Country/Region"] == COUNTRY]
+
+    # remove unecessary information
     df = df.drop(columns=["Unnamed: 0", "Country/Region", "Province/State", "Lat", "Long"])
 
     # convert to series
     df = df.iloc[0]
 
+    # start with first infection
+    df = df[df.values!=0]
+
     # parse to datetime
     df.index = pd.to_datetime(df.index, format='%m/%d/%y')
 
-    print(df.index)
+    time_in_days = np.arange(len(df.values))
 
-    #df.plot()
+    poptimal_exponential, pcovariance_exponential = curve_fit(exponential, time_in_days, df.values, p0=[0.3, 0.205, 0])
 
-    #plt.show()
+    fig, ax = plt.subplots()
 
-    time = np.arange(len(df.values))
+    ax.plot(df.index, df.values, '*' ,label="Infections in Germany")
+    ax.plot(df.index, exponential(time_in_days, *poptimal_exponential), 'r-', label="Exponential Fit")
 
-    poptimal_exponential, pcovariance_exponential = curve_fit(exponential, time, df.values)
+    ax.set_xlabel("Days")
+    ax.set_ylabel("Number of Infections")
 
-    print(poptimal_exponential)
+    ax.legend()
+    fig.autofmt_xdate()
 
-    plt.plot(time, df.values)
-    plt.plot(time, exponential(time, poptimal_exponential[0], poptimal_exponential[1], poptimal_exponential[2]))
+    fig.savefig("plots/exponential_fit.png")
+
     plt.show()
-
-    print(df.values)
-
-
-
 
 
 
