@@ -58,10 +58,10 @@ def main():
     ax.plot(df.index, exponential(time_in_days, *poptimal_exponential), 'g-', label="Exponential Fit")
     ax.set_xlabel("Date")
     ax.set_ylabel("Number of Infections")
-    fig.suptitle(date.today())
     ax.legend()
     ax.grid()
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=2))
+    fig.suptitle(date.today())
     fig.autofmt_xdate()
     fig.savefig("plots/exponential_fit.png", bbox_inches='tight')
 
