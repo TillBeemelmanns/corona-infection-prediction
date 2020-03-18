@@ -106,6 +106,7 @@ def git_push():
     repo.index.commit(commit_message)
     origin = repo.remote('origin')
     origin.push()
+    print("Auto Update Complete")
 
 
 if __name__ == '__main__':
