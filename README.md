@@ -1,11 +1,11 @@
 # Live Covid-19 extrapolation of infected persons in Germany
 
-## Current situation on 2020-03-17:
+## Current situation on 2020-03-18:
 
 ![](plots/exponential_fit.png)
 
 
-## Extrapolation for 5 days (Basic exponential growth assumed)
+## Extrapolation for 10 days (Basic exponential growth assumed)
 ![](plots/exponential_extrapolation.png)
 
 ## Data source
