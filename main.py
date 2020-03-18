@@ -6,8 +6,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+from datetime import date
+
 from scipy.optimize import curve_fit
 
+import subprocess
 from git import Repo
 
 CSV_FILENAME = "data/time_series_19-covid-Confirmed.csv"
@@ -92,21 +95,24 @@ def main():
     ax.legend()
     ax.grid()
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=2))
+    fig.suptitle(date.today())
     fig.autofmt_xdate()
     fig.savefig("plots/exponential_extrapolation.png", bbox_inches='tight')
 
 
 def git_push():
-
-    repo = Repo(".git")
-    print("HERE")
-    repo.git.add(update=True)
-    print("HERE")
-    repo.index.commit("Auto Update")
-    print("HERE")
-    origin = repo.remote(name='origin')
+    repo_dir = '.'
+    repo = Repo(repo_dir)
+    file_list = [
+        'main.py',
+        'plots/exponential_extrapolation.png',
+        'plots/exponential_fit.png'
+    ]
+    commit_message = 'Auto Update'
+    repo.index.add(file_list)
+    repo.index.commit(commit_message)
+    origin = repo.remote('origin')
     origin.push()
-
 
 if __name__ == '__main__':
 
