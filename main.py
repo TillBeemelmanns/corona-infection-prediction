@@ -8,7 +8,7 @@ import matplotlib.dates as mdates
 
 from scipy.optimize import curve_fit
 
-
+from git import Repo
 
 CSV_FILENAME = "data/time_series_19-covid-Confirmed.csv"
 CSV_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/' \
@@ -66,12 +66,16 @@ def main():
     fig.autofmt_xdate()
     fig.savefig("plots/exponential_fit.png", bbox_inches='tight')
 
-    # Plot Prediction
+    # Compute prediction
     prediction_in_days = 10
-
     time_in_days = np.arange(start=len(df.values), stop=len(df.values)+prediction_in_days)
+
     prediction = exponential(time_in_days, *poptimal_exponential).astype(int)
+
+    # convert to series object
     df_prediction = pd.Series(prediction)
+
+    # convert index to dates
     df_prediction.index = pd.date_range(df.index[-1], periods=prediction_in_days+1, closed="right")
 
     df_prediction = df.append(df_prediction)
@@ -79,9 +83,10 @@ def main():
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):
         print(df_prediction)
 
+    # Plot prediction
     fig, ax = plt.subplots(figsize=(15, 10))
     ax.plot(df.index, df.values, '*', label="Infections in Germany")
-    ax.plot(df_prediction.index, df_prediction.values, 'r--' ,label="Predicted Number of Infections")
+    ax.plot(df_prediction.index, df_prediction.values, 'r--', label="Predicted Number of Infections")
     ax.set_xlabel("Date")
     ax.set_ylabel("Number of Infections")
     ax.legend()
@@ -92,4 +97,19 @@ def main():
 
 
 if __name__ == '__main__':
+
+    PATH_OF_GIT_REPO = r'.git'
+    COMMIT_MESSAGE = 'Automatic Update'
+
+    def git_push():
+        try:
+            repo = Repo(PATH_OF_GIT_REPO)
+            repo.git.add(update=True)
+            repo.index.commit(COMMIT_MESSAGE)
+            origin = repo.remote(name='origin')
+            origin.push()
+        except:
+            print('Some error occured while pushing the code')
+
     main()
+    git_push()
