@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 from scipy.optimize import curve_fit
 
@@ -44,7 +45,7 @@ def main():
     df = df.iloc[0]
 
     # start with first infection
-    df = df[df.values!=0]
+    df = df[df.values != 0]
 
     # parse to datetime
     df.index = pd.to_datetime(df.index, format='%m/%d/%y')
@@ -53,21 +54,20 @@ def main():
 
     poptimal_exponential, pcovariance_exponential = curve_fit(exponential, time_in_days, df.values, p0=[0.3, 0.205, 0])
 
-    fig, ax = plt.subplots()
-
-    ax.plot(df.index, df.values, '*' ,label="Infections in Germany")
+    # Plot current DATA
+    fig, ax = plt.subplots(figsize=(15, 10))
+    ax.plot(df.index, df.values, '*', label="Infections in Germany")
     ax.plot(df.index, exponential(time_in_days, *poptimal_exponential), 'g-', label="Exponential Fit")
-
     ax.set_xlabel("Date")
     ax.set_ylabel("Number of Infections")
-
     ax.legend()
+    ax.grid()
+    ax.xaxis.set_major_locator(mdates.DayLocator(interval=2))
     fig.autofmt_xdate()
+    fig.savefig("plots/exponential_fit.png", bbox_inches='tight')
 
-    fig.savefig("plots/exponential_fit.png")
-
-
-    prediction_in_days = 5
+    # Plot Prediction
+    prediction_in_days = 10
 
     time_in_days = np.arange(start=len(df.values), stop=len(df.values)+prediction_in_days)
     prediction = exponential(time_in_days, *poptimal_exponential).astype(int)
@@ -79,19 +79,16 @@ def main():
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):
         print(df_prediction)
 
-
-    fig, ax = plt.subplots()
-
-    ax.plot(df.index, df.values, '*' ,label="Infections in Germany")
+    fig, ax = plt.subplots(figsize=(15, 10))
+    ax.plot(df.index, df.values, '*', label="Infections in Germany")
     ax.plot(df_prediction.index, df_prediction.values, 'r--' ,label="Predicted Number of Infections")
-
     ax.set_xlabel("Date")
     ax.set_ylabel("Number of Infections")
-
     ax.legend()
+    ax.grid()
+    ax.xaxis.set_major_locator(mdates.DayLocator(interval=2))
     fig.autofmt_xdate()
-
-    fig.savefig("plots/exponential_extrapolation.png")
+    fig.savefig("plots/exponential_extrapolation.png", bbox_inches='tight')
 
 
 if __name__ == '__main__':
