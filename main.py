@@ -7,16 +7,15 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 from datetime import date
-
+import time
 from scipy.optimize import curve_fit
-
-import subprocess
 from git import Repo
 
 CSV_FILENAME = "data/time_series_19-covid-Confirmed.csv"
 CSV_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/' \
           'csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
 COUNTRY = "Germany"
+UPDATE_EVERY_HOUR = 4
 
 
 def download_csv():
@@ -40,21 +39,17 @@ def main():
 
     # filter just one country
     df = df[df["Country/Region"] == COUNTRY]
-
-    # remove unecessary information
     df = df.drop(columns=["Unnamed: 0", "Country/Region", "Province/State", "Lat", "Long"])
+    df = df.iloc[0]  # convert to pd.Series
 
-    # convert to series
-    df = df.iloc[0]
-
-    # start with first infection
+    # start with first infections
     df = df[df.values != 0]
 
     # parse to datetime
     df.index = pd.to_datetime(df.index, format='%m/%d/%y')
 
+    # fit to exponential function
     time_in_days = np.arange(len(df.values))
-
     poptimal_exponential, pcovariance_exponential = curve_fit(exponential, time_in_days, df.values, p0=[0.3, 0.205, 0])
 
     # Plot current DATA
@@ -63,6 +58,7 @@ def main():
     ax.plot(df.index, exponential(time_in_days, *poptimal_exponential), 'g-', label="Exponential Fit")
     ax.set_xlabel("Date")
     ax.set_ylabel("Number of Infections")
+    fig.suptitle(date.today())
     ax.legend()
     ax.grid()
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=2))
@@ -72,10 +68,7 @@ def main():
     # Compute prediction
     prediction_in_days = 10
     time_in_days = np.arange(start=len(df.values), stop=len(df.values)+prediction_in_days)
-
     prediction = exponential(time_in_days, *poptimal_exponential).astype(int)
-
-    # convert to series object
     df_prediction = pd.Series(prediction)
 
     # convert index to dates
@@ -114,7 +107,11 @@ def git_push():
     origin = repo.remote('origin')
     origin.push()
 
+
 if __name__ == '__main__':
 
-    main()
-    git_push()
+    while True:
+        os.remove(CSV_FILENAME)
+        main()
+        git_push()
+        time.sleep(UPDATE_EVERY_HOUR*60*60)
