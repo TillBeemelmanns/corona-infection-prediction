@@ -97,14 +97,15 @@ def main():
 
 
 def git_push():
-    try:
-        repo = Repo(".git")
-        repo.git.add(update=True)
-        repo.index.commit("Auto Update")
-        origin = repo.remote(name='origin')
-        origin.push()
-    except:
-        print('Some error occured while pushing the code')
+
+    repo = Repo(".git")
+    print("HERE")
+    repo.git.add(update=True)
+    print("HERE")
+    repo.index.commit("Auto Update")
+    print("HERE")
+    origin = repo.remote(name='origin')
+    origin.push()
 
 
 if __name__ == '__main__':
