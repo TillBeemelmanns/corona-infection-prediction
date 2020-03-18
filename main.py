@@ -96,20 +96,18 @@ def main():
     fig.savefig("plots/exponential_extrapolation.png", bbox_inches='tight')
 
 
+def git_push():
+    try:
+        repo = Repo(".git")
+        repo.git.add(update=True)
+        repo.index.commit("Auto Update")
+        origin = repo.remote(name='origin')
+        origin.push()
+    except:
+        print('Some error occured while pushing the code')
+
+
 if __name__ == '__main__':
-
-    PATH_OF_GIT_REPO = r'.git'
-    COMMIT_MESSAGE = 'Automatic Update'
-
-    def git_push():
-        try:
-            repo = Repo(PATH_OF_GIT_REPO)
-            repo.git.add(update=True)
-            repo.index.commit(COMMIT_MESSAGE)
-            origin = repo.remote(name='origin')
-            origin.push()
-        except:
-            print('Some error occured while pushing the code')
 
     main()
     git_push()
