@@ -37,7 +37,7 @@ def main():
     df = df.iloc[0]  # convert to pd.Series
 
     # start with first infections
-    df = df[df.values != 0]
+    df = df[df.values < 100]
 
     # parse to datetime
     df.index = pd.to_datetime(df.index, format='%m/%d/%y')
@@ -110,7 +110,8 @@ if __name__ == '__main__':
             download_csv()
         else:
             os.remove(CSV_FILENAME)
-            
+            download_csv()
+
         main()
         git_push()
         time.sleep(UPDATE_EVERY_HOUR*60*60)
