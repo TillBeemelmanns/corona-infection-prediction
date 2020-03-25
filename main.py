@@ -15,7 +15,7 @@ CSV_FILENAME = "data/time_series_covid19_confirmed_global.csv"
 CSV_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/' \
           'csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
 COUNTRY = "Germany"
-UPDATE_EVERY_HOUR = 4
+UPDATE_EVERY_HOUR = 0.5
 
 
 def download_csv():
@@ -95,7 +95,7 @@ def git_push():
         'plots/exponential_extrapolation.png',
         'plots/exponential_fit.png'
     ]
-    commit_message = '🌿💚 Auto Update'
+    commit_message = '🌿💚Auto Update'
     repo.index.add(file_list)
     repo.index.commit(commit_message)
     origin = repo.remote('origin')
