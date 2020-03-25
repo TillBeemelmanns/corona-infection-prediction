@@ -12,8 +12,7 @@ from scipy.optimize import curve_fit
 from git import Repo
 
 CSV_FILENAME = "data/time_series_19-covid-Confirmed.csv"
-CSV_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/' \
-          'csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
+CSV_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
 COUNTRY = "Germany"
 UPDATE_EVERY_HOUR = 4
 
