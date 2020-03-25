@@ -11,8 +11,9 @@ import time
 from scipy.optimize import curve_fit
 from git import Repo
 
-CSV_FILENAME = "data/time_series_19-covid-Confirmed.csv"
-CSV_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
+CSV_FILENAME = "data/time_series_covid19_confirmed_global.csv"
+CSV_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/' \
+          'csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
 COUNTRY = "Germany"
 UPDATE_EVERY_HOUR = 4
 
@@ -27,12 +28,6 @@ def exponential(x, a, k, b):
 
 
 def main():
-
-    if not os.path.isfile(CSV_FILENAME):
-
-        download_csv()
-    else:
-        print("Use fetched data\n")
 
     df = pd.read_csv(CSV_FILENAME)
 
@@ -111,7 +106,11 @@ def git_push():
 if __name__ == '__main__':
 
     while True:
-        os.remove(CSV_FILENAME)
+        if not os.path.isfile(CSV_FILENAME):
+            download_csv()
+        else:
+            os.remove(CSV_FILENAME)
+            
         main()
         git_push()
         time.sleep(UPDATE_EVERY_HOUR*60*60)
