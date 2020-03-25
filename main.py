@@ -37,7 +37,7 @@ def main():
     df = df.iloc[0]  # convert to pd.Series
 
     # start with first infections
-    df = df[df.values > 100]
+    df = df[df.values > 50]
 
     # parse to datetime
     df.index = pd.to_datetime(df.index, format='%m/%d/%y')
