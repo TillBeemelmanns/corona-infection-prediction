@@ -1,6 +1,6 @@
 # Live Covid-19 extrapolation of infected persons in Germany
 
-## Current situation on 2020-03-24:
+## Current situation on 2020-03-30:
 
 ![](plots/exponential_fit.png)
 
