@@ -1,12 +1,16 @@
 # Live Covid-19 extrapolation of infected persons in Germany
 
-## Current situation on 2020-03-30:
+### Current situation - Germany
+![](plots/exponential_fit_Germany.png)
 
-![](plots/exponential_fit.png)
+### Extrapolation for 10 days - Germany
+![](plots/exponential_extrapolation_Germany.png)
 
+### Current situation - US
+![](plots/exponential_fit_US.png)
 
-## Extrapolation for 10 days (Basic exponential growth assumed)
-![](plots/exponential_extrapolation.png)
+### Extrapolation for 10 days - US
+![](plots/exponential_extrapolation_US.png)
 
 ## Data source
 [Data Repository by Johns Hopkins CSSE](https://github.com/CSSEGISandData/COVID-19)
