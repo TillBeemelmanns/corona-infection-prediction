@@ -95,7 +95,7 @@ def git_push():
         'plots/exponential_extrapolation.png',
         'plots/exponential_fit.png'
     ]
-    commit_message = '🌿💚Auto Update'
+    commit_message = 'Auto Update'
     repo.index.add(file_list)
     repo.index.commit(commit_message)
     origin = repo.remote('origin')
