@@ -94,7 +94,7 @@ def plot_exponential(df, country):
     ax.legend()
     ax.grid()
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=2))
-    fig.suptitle(f"{date.today()} - Number of Infected persons in {country} - Extrapolation")
+    fig.suptitle(f"{date.today()} - Number of Infected persons in {country} - 10 day Extrapolation")
     fig.autofmt_xdate()
     fig.savefig(f"plots/exponential_extrapolation_{country}.png", bbox_inches='tight')
 
