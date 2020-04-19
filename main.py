@@ -88,7 +88,7 @@ def plot_exponential(df, country, min_infections, duration_exponential_phase):
         df_prediction.index[duration_exponential_phase:],
         df_prediction.values[duration_exponential_phase:],
         'r--',
-        label="Predicted Number of Infections"
+        label="Exponential Phase Prediction"
     )
     ax.set_xlabel("Date")
     ax.set_ylabel("Number of Infections")
