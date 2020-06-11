@@ -61,7 +61,10 @@ def plot_model(df, country, min_infections,
     duration_exponential_phase = end_exponential_phase - start_exponential_phase
     days_exponential_phase = np.arange(duration_exponential_phase) + start_exponential_phase
     poptimal_exponential, pcovariance_exponential = curve_fit(
-        exponential, days_exponential_phase, df.values[start_exponential_phase:end_exponential_phase], p0=[1, 0.35, 0]
+        exponential,
+        days_exponential_phase,
+        df.values[start_exponential_phase:end_exponential_phase],
+        p0=[1, 0.35, 0]
     )
 
     # compute exponential prediction
@@ -83,7 +86,10 @@ def plot_model(df, country, min_infections,
     duration_linear_phase = end_linear_phase - start_linear_phase
     days_linear_phase = np.arange(duration_linear_phase) + start_linear_phase
     poptimal_linear, pcovariance_linear = curve_fit(
-        linear_func, days_linear_phase, df.values[start_linear_phase:end_linear_phase], p0=[1, 1]
+        linear_func,
+        days_linear_phase,
+        df.values[start_linear_phase:end_linear_phase],
+        p0=[1, 1]
     )
 
     # compute linear prediction
@@ -115,7 +121,7 @@ def plot_model(df, country, min_infections,
     ax.plot(
          df.index[start_exponential_phase:end_exponential_phase],
          exponential(days_exponential_phase, *poptimal_exponential),
-         'g-',
+         'r-',
          linewidth=2,
          label="Exponential Phase"
     )
