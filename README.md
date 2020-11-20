@@ -1,9 +1,9 @@
-# Live Covid-19 extrapolation of infected persons in Germany
+# ~~Live~~ Covid-19 extrapolation of infected persons in Germany and US
 
-### Current situation - Germany
+### Situation for the first 200 days - Germany
 ![](plots/model_Germany.png)
 
-### Current situation - US
+### Situation for the first 200 days - US
 ![](plots/model_US.png)
 
 ## Data source

@@ -15,11 +15,13 @@ CSV_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/' \
 COUNTRIES = [
     {"country": "Germany", "min_infections": 15,
      "start_exponential_phase": 0, "end_exponential_phase": 44,
-     "start_linear_phase": 44, "end_linear_phase": 60},
+     "start_linear_phase": 44, "end_linear_phase": 60,
+     "end_after_n_days": 200},
 
     {"country": "US", "min_infections": 15,
      "start_exponential_phase": 0, "end_exponential_phase": 42,
-     "start_linear_phase": 42, "end_linear_phase": 75},
+     "start_linear_phase": 42, "end_linear_phase": 75,
+     "end_after_n_days": 200},
 ]
 
 
@@ -43,7 +45,8 @@ def get_csv():
 
 def plot_model(df, country, min_infections,
                start_exponential_phase, end_exponential_phase,
-               start_linear_phase, end_linear_phase):
+               start_linear_phase, end_linear_phase,
+               end_after_n_days):
 
     # filter just one country
     df = df[df["Country/Region"] == country]
@@ -53,6 +56,9 @@ def plot_model(df, country, min_infections,
 
     # start with first infections
     df = df[df.values > min_infections]
+
+    # apply maximal number of days to consider
+    df = df[:end_after_n_days]
 
     # parse to datetime
     df.index = pd.to_datetime(df.index, format='%m/%d/%y')
@@ -106,7 +112,6 @@ def plot_model(df, country, min_infections,
         periods=duration_linear_phase + prediction_in_days,
         closed="left"
     )
-
 
     fig, ax = plt.subplots(figsize=(15, 10))
     # plot real data
@@ -171,4 +176,6 @@ if __name__ == '__main__':
                    country_info["start_exponential_phase"],
                    country_info["end_exponential_phase"],
                    country_info["start_linear_phase"],
-                   country_info["end_linear_phase"])
+                   country_info["end_linear_phase"],
+                   country_info["end_after_n_days"]
+                   )
